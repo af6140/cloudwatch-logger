@@ -1,4 +1,4 @@
-BIN := cloudwatch-logger
+BIN := cwlogger
 
 $(BIN): vendor main.go
 	go build -o $(BIN) main.go
