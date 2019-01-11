@@ -52,7 +52,20 @@ func main() {
 	group := cloudwatch.NewGroup(groupName, client)
 	w, err := group.Create(streamName)
 	if err != nil {
-		log.Fatal(err)
+		if awsErr, ok := err.(awserr.Error); ok {
+			if awsErr.Code() == "ResourceAlreadyExistsException" {
+				describeOutput, fError := client.DescribeLogStreams(&cloudwatchlogs.DescribeLogStreamsInput{LogGroupName: aws.String(groupName), LogStreamNamePrefix: aws.String(streamName), Limit: aws.Int64(1)})
+				if fError != nil {
+					log.Fatal(fError)
+				} else {
+					s := describeOutput.LogStreams[0]
+					token := describeOutput.NextToken
+					w = cloudwatch.NewWriterWithToken(groupName, *s.LogStreamName, token, client)
+				}
+			} else {
+				log.Fatal(err)
+			}
+		}
 	}
 
 	defer func(w io.Writer) {

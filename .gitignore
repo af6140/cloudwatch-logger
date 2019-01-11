@@ -2,3 +2,5 @@
 *.zip
 cloudwatch-logger
 vendor/*/*
+*.lock
+cwlogger

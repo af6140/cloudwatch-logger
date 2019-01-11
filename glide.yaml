@@ -1,0 +1,10 @@
+package: .
+import:
+- package: github.com/aws/aws-sdk-go
+  subpackages:
+  - aws
+  - aws/awserr
+  - aws/session
+  - service/cloudwatchlogs
+- package: github.com/ejholmes/cloudwatch
+  repo:    https://github.com/discobean/ejholmes-cloudwatch.git
